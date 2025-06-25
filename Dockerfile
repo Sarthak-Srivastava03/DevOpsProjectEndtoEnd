@@ -15,5 +15,7 @@ WORKDIR /app
 # Copy the JAR from the builder stage
 COPY --from=builder /app/target/demo-helloworld-webapp-0.0.1-SNAPSHOT.jar app.jar
 
+EXPOSE 8080
+
 # Run the JAR
 ENTRYPOINT ["java", "-jar", "app.jar"]
