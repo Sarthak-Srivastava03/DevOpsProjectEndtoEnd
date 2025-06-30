@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Install Prometheus
+cd /opt
+wget https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+tar -xvzf prometheus-2.52.0.linux-amd64.tar.gz
+mv prometheus-2.52.0.linux-amd64 prometheus
+
+# Copy config files
+cp ~/DevOpsProjectEndtoEnd/prometheus/prometheus.yml /opt/prometheus/
+cp ~/DevOpsProjectEndtoEnd/prometheus/alerts.yml /opt/prometheus/
+
+# Run Prometheus
+cd /opt/prometheus
+nohup ./prometheus --config.file=prometheus.yml > prometheus.log 2>&1 &
+
+# Install Alertmanager
+cd /opt
+wget https://github.com/prometheus/alertmanager/releases/download/v0.27.0/alertmanager-0.27.0.linux-amd64.tar.gz
+tar -xvzf alertmanager-0.27.0.linux-amd64.tar.gz
+mv alertmanager-0.27.0.linux-amd64 alertmanager
+
+# Copy Alertmanager config
+cp ~/DevOpsProjectEndtoEnd/alertmanager/alertmanager.yml /opt/alertmanager/
+
+# Run Alertmanager
+cd /opt/alertmanager
+nohup ./alertmanager --config.file=alertmanager.yml > alertmanager.log 2>&1 &

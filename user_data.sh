@@ -46,5 +46,9 @@ fi
 # Run Docker container in detached mode
 docker run -d -p 8080:8080 java-ec2-app
 
+chmod +x setup-prometheus.sh
+./setup-prometheus.sh
+
 # Optional: output running containers for confirmation
 docker ps
+	

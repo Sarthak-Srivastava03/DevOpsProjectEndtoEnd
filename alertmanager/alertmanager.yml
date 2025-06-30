@@ -1,0 +1,14 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'sssrivastava1999@gmail.com'
+  smtp_auth_username: 'sssrivastava1999@gmail.com'
+  smtp_auth_password: 'gthk izla rytg irmu'
+
+route:
+  receiver: 'gmail-notifier'
+
+receivers:
+  - name: 'gmail-notifier'
+    email_configs:
+      - to: 'sssrivastava1999@gmail.com'
+        send_resolved: true
