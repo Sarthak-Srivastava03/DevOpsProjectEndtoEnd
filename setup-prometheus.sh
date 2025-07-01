@@ -1,14 +1,25 @@
 #!/bin/bash
-
 # Install Prometheus
 cd /opt
 wget https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
 tar -xvzf prometheus-2.52.0.linux-amd64.tar.gz
 mv prometheus-2.52.0.linux-amd64 prometheus
 
-# Copy config files
-cp ~/DevOpsProjectEndtoEnd/prometheus/prometheus.yml /opt/prometheus/
-cp ~/DevOpsProjectEndtoEnd/prometheus/alerts.yml /opt/prometheus/
+
+# Copy Prometheus config
+if [ -f ~/DevOpsProjectEndtoEnd/prometheus/prometheus.yml ]; then
+  cp ~/DevOpsProjectEndtoEnd/prometheus/prometheus.yml /opt/prometheus/
+else
+  echo "❌ prometheus.yml not found"
+fi
+
+# Copy alerts.yml with a check
+if [ -f ~/DevOpsProjectEndtoEnd/prometheus/alerts.yml ]; then
+  cp ~/DevOpsProjectEndtoEnd/prometheus/alerts.yml /opt/prometheus/
+else
+  echo "❌ alerts.yml not found — check repo sync timing or git clone status"
+fi
+
 
 # Run Prometheus
 cd /opt/prometheus
