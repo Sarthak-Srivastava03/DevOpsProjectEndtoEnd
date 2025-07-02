@@ -17,7 +17,7 @@ resource "aws_instance" "grafana_app" {
 }
 
 resource "aws_security_group" "allow_ssh_http_prometheus_grafanatwo" {
-  name        = "allow_ssh_http_prometheus_grafana_sg"
+  name        = "allow_ssh_http_prometheus_grafana_sg2"
   description = "Allow SSH and HTTP and Prometheus and Alertmanager access"
 
   ingress {
