@@ -7,7 +7,7 @@ resource "aws_instance" "grafana_app" {
   instance_type = "t2.micro"
   key_name      = "projectKey"  # Your .pem key name
 
-  vpc_security_group_ids = [aws_security_group.allow_ssh_http_prometheus_grafana.id]
+  vpc_security_group_ids = [aws_security_group.allow_ssh_http_prometheus_grafanatwo.id]
 
   user_data = file("${path.module}/user_data.sh")
 
@@ -16,7 +16,7 @@ resource "aws_instance" "grafana_app" {
   }
 }
 
-resource "aws_security_group" "allow_ssh_http_prometheus_grafana" {
+resource "aws_security_group" "allow_ssh_http_prometheus_grafanatwo" {
   name        = "allow_ssh_http_prometheus_grafana_sg"
   description = "Allow SSH and HTTP and Prometheus and Alertmanager access"
 
