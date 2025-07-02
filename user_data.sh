@@ -67,6 +67,13 @@ cp /home/ubuntu/DevOpsProjectEndtoEnd/alertmanager/alertmanager.yml /opt/alertma
 cd /opt/alertmanager
 nohup ./alertmanager --config.file=alertmanager.yml > /opt/alertmanager/alertmanager.log 2>&1 &
 
-# Show running containers (optional)
-docker ps
+# === GRAFANA INSTALLATION ===
+wget -q -O /usr/share/keyrings/grafana.key https://apt.grafana.com/gpg.key
+echo "deb [signed-by=/usr/share/keyrings/grafana.key] https://apt.grafana.com stable main" | tee /etc/apt/sources.list.d/grafana.list
 
+apt update -y
+apt install -y grafana
+
+systemctl daemon-reexec
+systemctl enable grafana-server
+systemctl start grafana-server
