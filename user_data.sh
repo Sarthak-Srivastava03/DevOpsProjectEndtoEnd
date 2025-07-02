@@ -74,6 +74,17 @@ echo "deb [signed-by=/usr/share/keyrings/grafana.key] https://apt.grafana.com st
 apt update -y
 apt install -y grafana
 
+mkdir -p /etc/grafana/provisioning/datasources
+cat <<EOF > /etc/grafana/provisioning/datasources/prometheus.yaml
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://localhost:9090
+    isDefault: true
+EOF
+
 systemctl daemon-reexec
 systemctl enable grafana-server
 systemctl start grafana-server
