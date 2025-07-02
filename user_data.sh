@@ -4,51 +4,69 @@
 exec > /var/log/user-data.log 2>&1
 set -x
 
-# Update packages and install Docker
+# Update and install required packages
 apt update -y
-apt install docker.io -y
+apt install -y docker.io wget tar
 
-# Start Docker service and enable on reboot
+# Start and enable Docker
 systemctl start docker
 systemctl enable docker
 
-# Add 'ubuntu' user to docker group
+# Add user to docker group
 usermod -aG docker ubuntu
 
-# Sleep to allow Docker to fully initialize
+# Sleep to ensure Docker is ready
 sleep 20
 
-# Switch to the ubuntu home directory
+# Move to home directory
 cd /home/ubuntu || exit 1
 
-# Clone your GitHub repo (if not already cloned)
+# Clone your GitHub repo if not already present
 if [ ! -d "DevOpsProjectEndtoEnd" ]; then
   git clone https://github.com/Sarthak-Srivastava03/DevOpsProjectEndtoEnd.git
 fi
 
 cd DevOpsProjectEndtoEnd || exit 1
 
-# Verify that the Dockerfile and Maven project exist
-if [ ! -f "Dockerfile" ]; then
-  echo "Dockerfile missing!"
-  exit 1
-fi
-
 # Build Docker image
 docker build -t java-ec2-app .
 
-# Check if build was successful
+# If Docker build fails, exit
 if [ $? -ne 0 ]; then
   echo "Docker build failed"
   exit 1
 fi
 
-# Run Docker container in detached mode
+# Run Spring Boot container
 docker run -d -p 8080:8080 java-ec2-app
 
-chmod +x setup-prometheus.sh
-./setup-prometheus.sh
+# === PROMETHEUS INSTALLATION ===
+cd /opt || exit 1
+wget https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+tar -xvzf prometheus-2.52.0.linux-amd64.tar.gz
+mv prometheus-2.52.0.linux-amd64 prometheus
 
-# Optional: output running containers for confirmation
+# Copy Prometheus config from repo
+cp /home/ubuntu/DevOpsProjectEndtoEnd/prometheus/prometheus.yml /opt/prometheus/
+cp /home/ubuntu/DevOpsProjectEndtoEnd/prometheus/alerts.yml /opt/prometheus/
+
+# Run Prometheus
+cd /opt/prometheus
+nohup ./prometheus --config.file=prometheus.yml > /opt/prometheus/prometheus.log 2>&1 &
+
+# === ALERTMANAGER INSTALLATION ===
+cd /opt || exit 1
+wget https://github.com/prometheus/alertmanager/releases/download/v0.27.0/alertmanager-0.27.0.linux-amd64.tar.gz
+tar -xvzf alertmanager-0.27.0.linux-amd64.tar.gz
+mv alertmanager-0.27.0.linux-amd64 alertmanager
+
+# Copy Alertmanager config
+cp /home/ubuntu/DevOpsProjectEndtoEnd/alertmanager/alertmanager.yml /opt/alertmanager/
+
+# Run Alertmanager
+cd /opt/alertmanager
+nohup ./alertmanager --config.file=alertmanager.yml > /opt/alertmanager/alertmanager.log 2>&1 &
+
+# Show running containers (optional)
 docker ps
-	
+
