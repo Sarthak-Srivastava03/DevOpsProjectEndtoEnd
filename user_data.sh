@@ -74,8 +74,14 @@ echo "deb [signed-by=/usr/share/keyrings/grafana.key] https://apt.grafana.com st
 apt update -y
 apt install -y grafana
 
+systemctl daemon-reexec
+systemctl enable grafana-server
+systemctl start grafana-server
+
+# === GRAFANA DATASOURCE PROVISIONING ===
 mkdir -p /etc/grafana/provisioning/datasources
-cat <<EOF > /etc/grafana/provisioning/datasources/prometheus.yaml
+
+cat <<EOF | tee /etc/grafana/provisioning/datasources/prometheus.yml
 apiVersion: 1
 datasources:
   - name: Prometheus
@@ -85,6 +91,5 @@ datasources:
     isDefault: true
 EOF
 
-systemctl daemon-reexec
-systemctl enable grafana-server
-systemctl start grafana-server
+# Restart Grafana to load the new data source
+systemctl restart grafana-server
