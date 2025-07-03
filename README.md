@@ -59,10 +59,10 @@ ________________________________________
 📸 Screenshots
 Prometheus Alerts 	
  🔔 Prometheus Alerts
-![Prometheus Alerts](./screenshots/prometheus_alerts.png)
+![Prometheus Alerts](./screenshots/Prometheus_Alert_inactive.png)
 	
 📊 Grafana Dashboard
-![Grafana Dashboard](./screenshots/grafana_dashboard.png)	
+![Grafana Dashboard](./screenshots/Grafana_Dashboard_Metrics_Up.png)	
 ________________________________________
 🙌 Author
 Sarthak Srivastava
